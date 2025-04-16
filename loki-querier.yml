@@ -1,0 +1,31 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: loki-querier
+  namespace: observability
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: loki-querier
+  template:
+    metadata:
+      labels:
+        app: loki-querier
+    spec:
+      containers:
+        - name: loki
+          image: grafana/loki:2.9.0
+          args: ["-config.file=/etc/loki/config.yaml", "-target=querier"]
+          volumeMounts:
+            - name: config
+              mountPath: /etc/loki
+            - name: data
+              mountPath: /loki
+      volumes:
+        - name: config
+          configMap:
+            name: loki-config
+        - name: data
+          emptyDir: {}
