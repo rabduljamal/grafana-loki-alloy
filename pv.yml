@@ -1,0 +1,15 @@
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: loki-pv
+  namespace: ns-grafana
+spec:
+  capacity:
+    storage: 20Gi # Ukuran volume
+  accessModes:
+    - ReadWriteOnce # Penggunaan volume oleh satu pod dalam satu waktu
+  persistentVolumeReclaimPolicy: Retain # Pilihan untuk menyimpan data setelah PV dihapus
+  storageClassName: standard # Sesuaikan dengan storage class yang digunakan di cluster
+  hostPath: # Contoh untuk menggunakan penyimpanan lokal pada node
+    path: /mnt/loki-data # Path pada node yang digunakan untuk volume

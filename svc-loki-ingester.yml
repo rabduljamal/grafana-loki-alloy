@@ -1,15 +1,14 @@
----
 apiVersion: v1
 kind: Service
 metadata:
-  name: loki-query-frontend
+  name: loki-ingester
   namespace: ns-grafana
 spec:
   selector:
-    app: loki-query-frontend
+    app: loki-ingester # sesuaikan dengan label pod ingester kamu
   ports:
     - name: http
-      port: 3200
+      port: 3100
       targetPort: 3100
     - name: grpc
       port: 9095

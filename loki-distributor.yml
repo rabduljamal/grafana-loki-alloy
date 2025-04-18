@@ -3,9 +3,9 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: loki-distributor
-  namespace: observability
+  namespace: ns-grafana
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: loki-distributor
@@ -18,14 +18,22 @@ spec:
         - name: loki
           image: grafana/loki:2.9.0
           args: ["-config.file=/etc/loki/config.yaml", "-target=distributor"]
+          ports:
+            - name: http
+              containerPort: 3100
+            - name: grpc
+              containerPort: 9095
+            - name: memberlist
+              containerPort: 7946
           volumeMounts:
             - name: config
               mountPath: /etc/loki
-            - name: data
+            - name: loki-data
               mountPath: /loki
       volumes:
         - name: config
           configMap:
-            name: loki-config
-        - name: data
-          emptyDir: {}
+            name: loki-common-config
+        - name: loki-data
+          persistentVolumeClaim:
+            claimName: loki-data-pvc

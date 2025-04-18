@@ -3,7 +3,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: loki-table-manager
-  namespace: observability
+  namespace: ns-grafana
 spec:
   replicas: 1
   selector:
@@ -26,6 +26,6 @@ spec:
       volumes:
         - name: config
           configMap:
-            name: loki-config
+            name: loki-common-config
         - name: data
           emptyDir: {}
